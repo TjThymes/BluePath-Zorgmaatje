@@ -1,6 +1,7 @@
-﻿namespace BluePath_Backend
-{
-    public class _
-    {
-    }
-}
+﻿# Ignore temp files
+Temp/
+*.tmp
+*.bak
+*.cashe
+*.log
+*.log.*

@@ -1,0 +1,6 @@
+@BluePathBackend_HostAddress = http://localhost:5296
+
+GET {{BluePathBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

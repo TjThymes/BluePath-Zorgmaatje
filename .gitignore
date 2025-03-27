@@ -1,0 +1,98 @@
+﻿# === DOTNET / ASP.NET ===
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vspx
+.vscode/
+.vs/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+# Secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# JetBrains Rider & ReSharper
+.idea/
+*.DotSettings.user
+
+# Entity Framework
+Migrations/
+
+# Logs
+*.log
+logs/
+*.sqlite
+
+# === UNITY ===
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+Assets/AssetStoreTools*
+UserSettings/
+MemoryCaptures/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+sysinfo.txt
+
+# Unity Crash Reports
+sysinfo.txt
+*.stacktrace
+
+# Builds
+*.apk
+*.aab
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserstate
+
+# === GIT ===
+.DS_Store
+Thumbs.db
+*.bak
+*.old
+*.swp
+*.tmp
+*.orig
+*.rej
+
+# Logs
+*.log
+
+# Compiled DLLs
+*.dll
+*.exe
+*.class
+*.jar
+*.war
+*.pyc
+
+# === DEPLOYMENT / CLOUD ===
+publish/
+*.PublishSettings
+*.azurePubxml
+*.deployment
+*.env

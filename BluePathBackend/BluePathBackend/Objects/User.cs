@@ -17,5 +17,6 @@ namespace BluePathBackend.Objects
     public class ApplicationUser : IdentityUser
     {
         public string Fullname { get; set; }
+        public string Avatar { get; set; }
     }
 }

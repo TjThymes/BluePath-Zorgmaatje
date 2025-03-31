@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BluePath_Backend.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<IDiaryRepository, DiaryRepository>();
+builder.Services.AddScoped<IPatientInfoRepository, PatientInfoRepository>();
 
 // ✅ Configuration van appsettings.json en omgeving-specifiek bestand
 builder.Configuration

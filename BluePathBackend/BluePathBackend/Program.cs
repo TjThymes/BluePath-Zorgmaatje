@@ -14,6 +14,8 @@ builder.Services.AddScoped<IDiaryRepository, DiaryRepository>();
 builder.Services.AddScoped<IPatientInfoRepository, PatientInfoRepository>();
 builder.Services.AddScoped<IUserRouteProgressRepository, UserRouteProgressRepository>();
 builder.Services.AddScoped<IRouteRepository, RouteRepository>();
+builder.Services.AddScoped<IUserAvatarRepository, UserAvatarRepository>();
+
 
 
 // ✅ Configuration van appsettings.json en omgeving-specifiek bestand

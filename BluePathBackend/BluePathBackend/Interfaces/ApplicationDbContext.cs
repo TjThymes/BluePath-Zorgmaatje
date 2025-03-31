@@ -9,16 +9,12 @@ namespace BluePath_Backend.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        // Voeg hier eventueel je DbSets toe, zoals:
+
         public DbSet<PatientInfo> PatientInfos { get; set; }
         public DbSet<DiaryEntry> DiaryEntries { get; set; }
         public DbSet<RouteStep> RouteSteps { get; set; }
         public DbSet<UserRouteStepProgress> StepProgress { get; set; }
+        public DbSet<UserAvatar> Avatars { get; set; }
 
-
-
-
-        // public DbSet<Environment2D> Environments { get; set; }
-        // public DbSet<GameObject> GameObjects { get; set; }
     }
 }

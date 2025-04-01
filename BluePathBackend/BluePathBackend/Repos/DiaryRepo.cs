@@ -45,5 +45,16 @@ namespace BluePath_Backend.Repositories
             _context.DiaryEntries.Remove(entry);
             return await _context.SaveChangesAsync() > 0;
         }
+        public async Task<DiaryEntry> UpdateAsync(Guid id, DiaryEntry entry)
+        {
+            var entryToUpdate = await _context.DiaryEntries.FindAsync(id);
+            if (entryToUpdate == null)
+                return null;
+            entryToUpdate.Title = entry.Title;
+            entryToUpdate.Note = entry.Note;
+            entryToUpdate.CreatedAt= DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return entryToUpdate;
+        }
     }
 }

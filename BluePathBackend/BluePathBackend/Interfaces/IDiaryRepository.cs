@@ -10,5 +10,6 @@ namespace BluePath_Backend.Interfaces
         Task<IEnumerable<DiaryEntry>> GetAllForUserAsync(string userId);
         Task<DiaryEntry> GetByIdAsync(Guid id);
         Task<bool> DeleteAsync(Guid id, string userId);
+        Task<DiaryEntry> UpdateAsync(Guid id, DiaryEntry entry);
     }
 }

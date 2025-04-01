@@ -43,5 +43,12 @@ namespace BluePath_Backend.Controllers
             var success = await _repo.DeleteAsync(id, userId);
             return success ? NoContent() : NotFound();
         }
+        public async Task<IActionResult> Update(Guid id, [FromBody] DiaryEntry entry)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            entry.UserId = userId;
+            var result = await _repo.UpdateAsync(id, entry);
+            return Ok(result);
+        }
     }
 }

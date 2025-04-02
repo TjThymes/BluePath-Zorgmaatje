@@ -10,5 +10,7 @@ namespace BluePath_Backend.Objects
         public string Title { get; set; }
         public string Description { get; set; }
         public string IconName { get; set; } // bv. "appointment", "hospital", "recovery"
+        public float x { get; set; } // X Location
+        public float y { get; set; } // Y Location
     }
 }

@@ -35,6 +35,13 @@ namespace BluePath_Backend.Controllers
             var entries = await _repo.GetAllForUserAsync(userId);
             return Ok(entries);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var entry = await _repo.GetByIdAsync(id);
+            return entry == null ? NotFound() : Ok(entry);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
@@ -43,6 +50,7 @@ namespace BluePath_Backend.Controllers
             var success = await _repo.DeleteAsync(id, userId);
             return success ? NoContent() : NotFound();
         }
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] DiaryEntry entry)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

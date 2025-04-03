@@ -1,5 +1,6 @@
 ﻿using BluePathBackend.Objects;
 using System;
+using System.Text.Json.Serialization;
 
 namespace BluePath_Backend.Objects
 {
@@ -7,7 +8,7 @@ namespace BluePath_Backend.Objects
     {
         public Guid Id { get; set; }
 
-        public string UserId { get; set; }
+        
         public ApplicationUser User { get; set; }
 
         public Guid RouteStepId { get; set; }
@@ -15,5 +16,7 @@ namespace BluePath_Backend.Objects
 
         public string Status { get; set; } // "todo", "in_progress", "done"
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        [JsonIgnore]
+        public string UserId { get; set; }
     }
 }

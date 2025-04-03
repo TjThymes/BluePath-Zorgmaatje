@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace BluePathBackend.Objects
 {
@@ -12,6 +13,7 @@ namespace BluePathBackend.Objects
         public DateTime? FirstAppointmentDate { get; set; }
 
         // optioneel: koppel aan gebruiker
-        public string UserId { get; set; }
+        [JsonIgnore]
+        public string ?UserId { get; set; }
     }
 }

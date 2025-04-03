@@ -1,5 +1,6 @@
 ﻿using BluePathBackend.Objects;
 using System;
+using System.Text.Json.Serialization;
 
 namespace BluePath_Backend.Objects
 {
@@ -11,6 +12,7 @@ namespace BluePath_Backend.Objects
         public int Body { get; set; }
         public int Legs { get; set; }
 
+        [JsonIgnore]
         public string UserId { get; set; }
     }
 }

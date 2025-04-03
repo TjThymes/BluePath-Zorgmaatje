@@ -1,5 +1,6 @@
 ﻿using BluePathBackend.Objects;
 using System;
+using System.Text.Json.Serialization;
 
 namespace BluePath_Backend.Objects
 {
@@ -9,8 +10,8 @@ namespace BluePath_Backend.Objects
         public string Title { get; set; }
         public string Note { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [JsonIgnore]
 
-        public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public string ?UserId { get; set; }
     }
 }

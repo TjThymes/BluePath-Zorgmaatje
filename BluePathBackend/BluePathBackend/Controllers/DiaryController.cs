@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using BluePath_Backend.Interfaces;
 using BluePath_Backend.Objects;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace BluePath_Backend.Controllers
+namespace BluePathBackend.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/diary")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DiaryController : ControllerBase
     {
         private readonly IDiaryRepository _repo;

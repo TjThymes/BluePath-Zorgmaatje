@@ -3,7 +3,7 @@ using BluePath_Backend.Interfaces;
 using BluePath_Backend.Objects;
 using Microsoft.EntityFrameworkCore;
 
-namespace BluePath_Backend.Repositories
+namespace BluePathBackend.Repos
 {
     public class UserRouteProgressRepository : IUserRouteProgressRepository
     {

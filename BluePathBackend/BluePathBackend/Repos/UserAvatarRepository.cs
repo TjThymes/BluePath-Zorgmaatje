@@ -4,7 +4,7 @@ using BluePath_Backend.Objects;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace BluePath_Backend.Repositories
+namespace BluePathBackend.Repos
 {
     public class UserAvatarRepository : IUserAvatarRepository
     {

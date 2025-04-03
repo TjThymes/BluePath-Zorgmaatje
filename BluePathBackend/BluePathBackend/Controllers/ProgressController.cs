@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using BluePath_Backend.Interfaces;
 using BluePath_Backend.Objects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace BluePath_Backend.Controllers
+namespace BluePathBackend.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/progress")]
     public class ProgressController : ControllerBase

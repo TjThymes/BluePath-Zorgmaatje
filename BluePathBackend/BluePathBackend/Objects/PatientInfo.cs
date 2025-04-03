@@ -13,6 +13,5 @@ namespace BluePathBackend.Objects
 
         // optioneel: koppel aan gebruiker
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace BluePathBackend.Interfaces
 {
     public interface IUserRepository
     {
-        Task<ApplicationUser> GetByUsernameAsync(string username);
+        Task<ApplicationUser> GetByEmailAsync(string email);
         Task<ApplicationUser> GetByIdAsync(string id);
         Task<IEnumerable<ApplicationUser>> GetAllAsync();
         Task<bool> CreateAsync(ApplicationUser user, string password);

@@ -6,11 +6,14 @@ using System.Security.Claims;
 using System.Text;
 using BluePath_Backend.Objects;
 using BluePath_Backend.Interfaces;
+using BluePathBackend.Other;
 
 using BluePathBackend.Interfaces;
 using BluePathBackend.Objects;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace BluePath_Backend.Controllers
+namespace BluePathBackend.Controllers
 {
     [ApiController]
     [Route("api/auth")]
@@ -19,18 +22,21 @@ namespace BluePath_Backend.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly JwtTokenGenerator _jwtTokenGenerator;
 
-        public AuthController(IUserRepository userRepository, IConfiguration configuration, UserManager<ApplicationUser> userManager)
+
+        public AuthController(IUserRepository userRepository, IConfiguration configuration, UserManager<ApplicationUser> userManager, JwtTokenGenerator jwtTokenGenerator)
         {
             _userRepository = userRepository;
             _configuration = configuration;
             _userManager = userManager;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var existingUser = await _userRepository.GetByUsernameAsync(model.Email);
+            var existingUser = await _userRepository.GetByEmailAsync(model.Email);
             if (existingUser != null)
                 return BadRequest(new { Message = "Gebruiker bestaat al." });
 
@@ -38,7 +44,8 @@ namespace BluePath_Backend.Controllers
             {
                 Fullname = model.Fullname,
                 Email = model.Email,
-                UserName = model.Email
+                UserName = model.Email,
+                AccountType = model.AccountType
             };
 
             var result = await _userRepository.CreateAsync(user, model.Password);
@@ -51,33 +58,40 @@ namespace BluePath_Backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-                return Unauthorized(new { Message = "Ongeldige gebruikersnaam of wachtwoord." });
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return Unauthorized(new { Message = "Ongeldige gebruikersnaam of wachtwoord." });
+                }
 
-            var token = GenerateJwtToken(user);
-            return Ok(new { AccessToken = token });
+                var isValid = await _userManager.CheckPasswordAsync(user, model.Password);
+                if (!isValid)
+                {
+                    return Unauthorized(new { Message = "Ongeldige gebruikersnaam of wachtwoord." });
+                }
+
+                var token = _jwtTokenGenerator.GenerateToken(user);
+                return Ok(new { accessToken = token });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Interne serverfout", Error = ex.Message });
+            }
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
+
+        [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("test-auth")]
+        public IActionResult TestAuth()
         {
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-            var claims = new[]
+            return Ok(new
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("fullname", user.Fullname)
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Issuer"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(2),
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                Claims = User.Claims.Select(c => new { c.Type, c.Value })
+            });
         }
     }
 }
+

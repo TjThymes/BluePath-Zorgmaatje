@@ -1,40 +1,48 @@
 ﻿using BluePath_Backend.Data;
 using BluePath_Backend.Interfaces;
 using BluePath_Backend.Objects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-[Authorize]
-[ApiController]
-[Route("api/avatar")]
-public class AvatarController : ControllerBase
+
+
+
+namespace BluePathBackend.Controllers
 {
-    private readonly IUserAvatarRepository _repo;
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ApiController]
+    [Route("api/avatar")]
 
-    public AvatarController(IUserAvatarRepository repo)
+    public class AvatarController : ControllerBase
     {
-        _repo = repo;
-    }
+        private readonly IUserAvatarRepository _repo;
 
-    [HttpPost("set")]
-    public async Task<IActionResult> SetAvatar([FromBody] UserAvatar model)
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var result = await _repo.SetOrUpdateAsync(userId, model);
-        return Ok(result);
-    }
+        public AvatarController(IUserAvatarRepository repo)
+        {
+            _repo = repo;
+        }
 
-    [HttpGet("me")]
-    public async Task<IActionResult> GetMyAvatar()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var avatar = await _repo.GetByUserIdAsync(userId);
-        if (avatar == null)
-            return NotFound();
+        [HttpPost("set")]
+        public async Task<IActionResult> SetAvatar([FromBody] UserAvatar model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _repo.SetOrUpdateAsync(userId, model);
+            return Ok(result);
+        }
 
-        return Ok(avatar);
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMyAvatar()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var avatar = await _repo.GetByUserIdAsync(userId);
+            if (avatar == null)
+                return NotFound();
+
+            return Ok(avatar);
+        }
+
     }
 
 }
-

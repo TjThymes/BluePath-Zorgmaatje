@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using BluePathBackend.Interfaces;
 using BluePathBackend.Objects;
 
-namespace BluePath_Backend.Repositories
+namespace BluePathBackend.Repos
 {
     public class UserRepository : IUserRepository
     {
@@ -18,9 +18,9 @@ namespace BluePath_Backend.Repositories
             _userManager = userManager;
         }
 
-        public async Task<ApplicationUser> GetByUsernameAsync(string username)
+        public async Task<ApplicationUser> GetByEmailAsync(string email)
         {
-            return await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            return await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<ApplicationUser> GetByIdAsync(string id)

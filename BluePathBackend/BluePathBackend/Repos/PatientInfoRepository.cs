@@ -3,7 +3,7 @@ using BluePath_Backend.Interfaces;
 using BluePathBackend.Objects;
 using Microsoft.EntityFrameworkCore;
 
-namespace BluePath_Backend.Repositories
+namespace BluePathBackend.Repos
 {
     public class PatientInfoRepository : IPatientInfoRepository
     {

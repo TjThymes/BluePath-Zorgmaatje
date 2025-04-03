@@ -4,10 +4,11 @@ using BluePath_Backend.Interfaces;
 using BluePathBackend.Objects;
 using System.Security.Claims;
 using BluePath_Backend.Objects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace BluePath_Backend.Controllers
+namespace BluePathBackend.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/routes")]
     public class RouteController : ControllerBase

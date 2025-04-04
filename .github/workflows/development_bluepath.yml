@@ -21,13 +21,13 @@ jobs:
           dotnet-version: '8.0.x'  # Zet juiste versie
 
       - name: Restore dependencies
-        run: dotnet restore BluePathBackend.sln
+        run: dotnet restore BluePathBackend/BluePathBackend.sln
 
       - name: Build project
-        run: dotnet build BluePathBackend.sln --configuration Release --no-restore
+        run: dotnet build BluePathBackend/BluePathBackend.sln --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test BluePathBackend.sln --no-build --verbosity normal
+        run: dotnet test BluePathBackend/BluePathBackend.sln --no-build --verbosity normal
 
       - name: Publish app
         run: dotnet publish BluePathBackend/BluePathBackend.csproj -c Release -o publish

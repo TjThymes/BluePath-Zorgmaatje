@@ -43,9 +43,7 @@ logs/
 Assets/AssetStoreTools*
 UserSettings/
 MemoryCaptures/
-*.csproj
 *.unityproj
-*.sln
 *.suo
 *.tmp
 *.user

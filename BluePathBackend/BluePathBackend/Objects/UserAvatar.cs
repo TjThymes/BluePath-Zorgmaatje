@@ -1,4 +1,5 @@
 ﻿using BluePathBackend.Objects;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,7 @@ namespace BluePath_Backend.Objects
         public int Legs { get; set; }
 
         [JsonIgnore]
+        [BindNever]
         public string UserId { get; set; }
     }
 }

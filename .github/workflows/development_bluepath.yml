@@ -18,31 +18,32 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '8.0.x'  # ✅ Juiste versie gebruiken
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore BluePathBackend/BluePathBackend.sln  # ✅ Pad naar .sln!
 
       - name: Build project
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build BluePathBackend\BluePathBackend.csproj --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test TestProject1\BluePathTests.csproj --no-build --verbosity normal  # ✅ Test project specifiek
 
       - name: Publish app
-        run: dotnet publish -c Release -o ./publish_output
+        run: dotnet publish BluePathBackend/BluePathBackend.sln -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: app
-          path: ./publish_output
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
-    needs: build_and_test
+    needs: build_and_test  # ✅ Alleen als build én tests geslaagd zijn
     environment:
       name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write
       contents: read

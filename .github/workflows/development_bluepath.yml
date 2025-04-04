@@ -18,7 +18,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'  # ✅ Update naar de juiste versie!
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
@@ -30,20 +30,19 @@ jobs:
         run: dotnet test --no-build --verbosity normal
 
       - name: Publish app
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o ./publish_output
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish_output
 
   deploy:
     runs-on: windows-latest
-    needs: build_and_test  # ✅ Deploy pas als tests slagen
+    needs: build_and_test
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write
       contents: read

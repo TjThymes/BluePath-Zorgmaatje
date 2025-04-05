@@ -17,6 +17,6 @@ namespace BluePath_Backend.Objects
         public string Status { get; set; } // "todo", "in_progress", "done"
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         [JsonIgnore]
-        public string ?UserId { get; set; }
+        public string UserId { get; set; }
     }
 }

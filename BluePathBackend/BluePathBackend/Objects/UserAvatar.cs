@@ -15,6 +15,6 @@ namespace BluePath_Backend.Objects
 
         [JsonIgnore]
         [BindNever]
-        public string ?UserId { get; set; }
+        public string UserId { get; set; }
     }
 }

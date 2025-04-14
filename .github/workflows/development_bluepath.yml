@@ -21,7 +21,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build BluePathBackend/BluePathBackend.sln --configuration Release
 
       - name: Publish with dotnet
         run: dotnet publish BluePathBackend/BluePathBackend/BluePathBackend.csproj -c Release -o publish_output

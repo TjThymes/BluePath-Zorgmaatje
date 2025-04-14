@@ -1,4 +1,4 @@
-name: Build, test and deploy ASP.Net Core app to Azure Web App - BluePath
+name: Build, Test en Deploy ASP.NET Core App naar Azure Web App - BluePath
 
 on:
   push:
@@ -13,26 +13,40 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
-      - name: Build with dotnet
+      - name: Build solution
         run: dotnet build BluePathBackend/BluePathBackend.sln --configuration Release
 
-      - name: Publish with dotnet
+      - name: Test projects
+        run: dotnet test BluePathBackend/TestProject1/BluePathTests.csproj --configuration Release
+
+      - name: Publish app
         run: dotnet publish BluePathBackend/BluePathBackend/BluePathBackend.csproj -c Release -o publish_output
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
           path: publish_output
 
-      - name: Download artifact from build job
+  deploy:
+    runs-on: windows-latest
+    needs: build-and-test
+    environment:
+      name: 'Production'
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: .net-app
@@ -46,14 +60,8 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_06516DFC7A26473BA048B0F4ED68F898 }}
 
       - name: Set Azure App Settings
-        uses: azure/appservice-settings@v2
-        with:
-          app-name: 'BluePath'
-          settings-json: |
-            {
-            "ConnectionStrings__SqlConnectionString": "${{ secrets.SQLCONNECTIONSTRING }}", 
-            "Jwt__Key": "${{ secrets.JWT_KEY }}"
-            }
+        run: |
+          az webapp config appsettings set --name BluePath --resource-group 1.3 --settings ConnectionStrings__SqlConnectionString="${{ secrets.SQLCONNECTIONSTRING }}" Jwt__Key="${{ secrets.JWT_KEY }}"
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -62,4 +70,3 @@ jobs:
           app-name: 'BluePath'
           slot-name: 'Production'
           package: ./publish_output
-

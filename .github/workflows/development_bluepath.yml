@@ -50,10 +50,10 @@ jobs:
         with:
           app-name: 'BluePath'
           settings-json: |
-              {
-          "ConnectionStrings__SqlConnectionString": "${{ secrets.SQLCONNECTIONSTRING }}",
-          "Jwt__Key": "${{ secrets.JWT_KEY }}"
-              }
+            {
+            "ConnectionStrings__SqlConnectionString": "${{ secrets.SQLCONNECTIONSTRING }}", 
+            "Jwt__Key": "${{ secrets.JWT_KEY }}"
+            }
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

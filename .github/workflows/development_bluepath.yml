@@ -32,37 +32,34 @@ jobs:
           name: .net-app
           path: publish_output
 
-  deploy:
-    runs-on: windows-latest
-    needs: build-and-test
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write
-      contents: read
+- name: Download artifact from build job
+  uses: actions/download-artifact@v4
+  with:
+    name: .net-app
+    path: ./publish_output
 
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
-          path: ./publish_output
+- name: Login to Azure
+  uses: azure/login@v2
+  with:
+    client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4EEAB572575A4789865B0C7B0E35840A }}
+    tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B4AED12824014DE3971FBF0732BB8F9F }}
+    subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_06516DFC7A26473BA048B0F4ED68F898 }}
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4EEAB572575A4789865B0C7B0E35840A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B4AED12824014DE3971FBF0732BB8F9F }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_06516DFC7A26473BA048B0F4ED68F898 }}
+- name: Set Azure App Settings
+  uses: azure/appservice-settings@v2
+  with:
+    app-name: 'BluePath'
+    settings-json: |
+      {
+        "ConnectionStrings__SqlConnectionString": "${{ secrets.SQLCONNECTIONSTRING }}",
+        "Jwt__Key": "${{ secrets.JWT_KEY }}"
+      }
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        env:
-          ConnectionStrings__SqlConnectionString: ${{ secrets.SQLCONNECTIONSTRING }}
-          Jwt__Key: ${{ secrets.JWT_KEY }}
-        with:
-          app-name: 'BluePath'
-          slot-name: 'Production'
-          package: ./publish_output
+- name: Deploy to Azure Web App
+  id: deploy-to-webapp
+  uses: azure/webapps-deploy@v3
+  with:
+    app-name: 'BluePath'
+    slot-name: 'Production'
+    package: ./publish_output
+

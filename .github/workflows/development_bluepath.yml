@@ -59,7 +59,10 @@ jobs:
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
+        env:
+          ConnectionStrings__SqlConnectionString: ${{ secrets.SQLCONNECTIONSTRING }}
+          Jwt__Key: ${{ secrets.JWT_KEY }}
         with:
-          app-name: 'BluePath'
-          slot-name: 'Production'
-          package: ./publish_output
+         app-name: 'BluePath'
+         slot-name: 'Production'
+         package: ./publish_output

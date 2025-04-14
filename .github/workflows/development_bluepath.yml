@@ -24,7 +24,7 @@ jobs:
         run: dotnet build BluePathBackend/BluePathBackend.sln --configuration Release
 
       - name: Run tests
-        run: dotnet test BluePathBackend/BluePathBackend.Tests/BluePathBackend.Tests.csproj --configuration Release
+        run: dotnet test BluePathBackend/TestProject1/BluePathTests.csproj --configuration Release
 
       - name: Publish with dotnet
         run: dotnet publish BluePathBackend/BluePathBackend/BluePathBackend.csproj -c Release -o publish_output

@@ -1,4 +1,4 @@
-name: Build, Test and Deploy ASP.Net Core app to Azure Web App - BluePath
+name: Build, test and deploy ASP.Net Core app to Azure Web App - BluePath
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_test:
+  build-and-test:
     runs-on: windows-latest
     permissions:
       contents: read
@@ -15,33 +15,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET
+      - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'  # Zet juiste versie
+          dotnet-version: '8.x'
 
-      - name: Restore dependencies
-        run: dotnet restore BluePathBackend/BluePathBackend.sln
+      - name: Build with dotnet
+        run: dotnet build BluePathBackend/BluePathBackend.sln --configuration Release
 
-      - name: Build solution
-        run: dotnet build BluePathBackend/BluePathBackend.sln --configuration Debug
+      - name: Run tests
+        run: dotnet test BluePathBackend/TestProject1/BluePathTests.csproj --configuration Release
 
-      - name: Test solution
-        run: dotnet test BluePathBackend/BluePathBackend.sln --no-build --verbosity normal
+      - name: Publish with dotnet
+        run: dotnet publish BluePathBackend/BluePathBackend/BluePathBackend.csproj -c Release -o publish_output
 
-
-      - name: Publish app
-        run: dotnet publish BluePathBackend/BluePathBackend/BluePathBackend.csproj -c Release -o publish
-
-      - name: Upload artifact for deployment
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: app
-          path: publish
+          name: .net-app
+          path: publish_output
 
   deploy:
     runs-on: windows-latest
-    needs: build_and_test
+    needs: build-and-test
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -50,22 +46,26 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: app
+          name: .net-app
+          path: ./publish_output
 
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4EEAB572575A4789865B0C7B0E35840A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B4AED12824014DE3971FBF0732BB8F9F }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_06516DFC7A26473BA048B0F4ED68F898 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
+        env:
+          ConnectionStrings__SqlConnectionString: ${{ secrets.SQLCONNECTIONSTRING }}
+          Jwt__Key: ${{ secrets.JWT_KEY }}
         with:
           app-name: 'BluePath'
           slot-name: 'Production'
-          package: .
+          package: ./publish_output

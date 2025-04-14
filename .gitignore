@@ -93,3 +93,5 @@ publish/
 *.azurePubxml
 *.deployment
 *.env
+/BluePathBackend/BluePathBackend/Migrations/20250331190832_AddPatientInfo.cs
+/BluePathBackend/BluePathBackend/Migrations/ApplicationDbContextModelSnapshot.cs
